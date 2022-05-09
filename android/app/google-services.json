@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "1088613682505",
+    "project_id": "playtico-0123",
+    "storage_bucket": "playtico-0123.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1088613682505:android:9d208a2318f04bb5b2de98",
+        "android_client_info": {
+          "package_name": "com.playtico.playticoapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1088613682505-vna0eqcoo7qckshiqsguag5g9ggratvv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAiwzWlNxeDiItBvMbZshxji94OsvvzGAQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1088613682505-vna0eqcoo7qckshiqsguag5g9ggratvv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1088613682505-ln6kc4oa2f9p87sd4aq4ncgsb705ufft.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.playtico.playticoapp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
