@@ -1,7 +1,30 @@
 class SongsModel {
-  List<Songs>? songs;
-  SongsModel({this.songs});
+  String? status;
+  Data? data;
+
+  SongsModel({this.status, this.data});
+
   SongsModel.fromJson(Map<String, dynamic> json) {
+    status = json['status'];
+    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['status'] = this.status;
+    if (this.data != null) {
+      data['data'] = this.data!.toJson();
+    }
+    return data;
+  }
+}
+
+class Data {
+  List<Songs>? songs;
+
+  Data({this.songs});
+
+  Data.fromJson(Map<String, dynamic> json) {
     if (json['songs'] != null) {
       songs = <Songs>[];
       json['songs'].forEach((v) {
@@ -9,6 +32,7 @@ class SongsModel {
       });
     }
   }
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     if (this.songs != null) {
@@ -19,20 +43,29 @@ class SongsModel {
 }
 
 class Songs {
-  String? name;
-  String? iso2;
-  String? iso3;
-  Songs({this.name, this.iso2, this.iso3});
+  String? id;
+  String? title;
+  String? performer;
+  String? cover;
+  String? song;
+
+  Songs({this.id, this.title, this.performer, this.cover, this.song});
+
   Songs.fromJson(Map<String, dynamic> json) {
-    name = json['name'];
-    iso2 = json['iso2'];
-    iso3 = json['iso3'];
+    id = json['id'];
+    title = json['title'];
+    performer = json['performer'];
+    cover = json['cover'];
+    song = json['song'];
   }
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['name'] = this.name;
-    data['iso2'] = this.iso2;
-    data['iso3'] = this.iso3;
+    data['id'] = this.id;
+    data['title'] = this.title;
+    data['performer'] = this.performer;
+    data['cover'] = this.cover;
+    data['song'] = this.song;
     return data;
   }
 }
