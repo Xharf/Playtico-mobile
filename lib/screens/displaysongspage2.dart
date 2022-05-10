@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:playticoapp/models/songs_model.dart';
+import 'package:playticoapp/models/songs_model2.dart';
 import 'package:playticoapp/services/songs_data_store.dart';
 
 class DisplaySongs extends StatefulWidget {
@@ -73,14 +73,14 @@ class _DisplaySongsState extends State<DisplaySongs> {
         return Card(
             child: Padding(
           padding: const EdgeInsets.all(15),
-          child: _buildItemCountries(
+          child: _buildItemSongs(
               "${data?.songs?[index].title} by ${data?.songs?[index].performer}"),
         ));
       },
     );
   }
 
-  Widget _buildItemCountries(String value) {
+  Widget _buildItemSongs(String value) {
     return Text(value);
   }
 
