@@ -27,13 +27,21 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: const Color(0xFFEEEEEE),
       appBar: AppBar(
-        backgroundColor: const Color(0xFF960E96),
+        backgroundColor: const Color(0xFFEEEEEE),
+        elevation: 0,
         title: const Text(
           "Discover",
           style: TextStyle(
-            fontSize: 26,
-            color: Colors.white,
-            fontWeight: FontWeight.w800
+            fontSize: 32,
+            color: Color(0xFFB226B2),
+            fontWeight: FontWeight.w900,
+            shadows: [
+              Shadow(
+                offset: Offset(2.0, 1.0),
+                blurRadius: 1.0,
+                color: Color(0xFFFF85FF),
+              )
+            ]
           )
         ),
       ),
