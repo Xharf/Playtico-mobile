@@ -122,22 +122,78 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           SizedBox(
-            height: 127,
+            height: double.infinity, //cara buat dinamis belum tahu
             child: ListView.separated(
               physics: const BouncingScrollPhysics(
                   parent: AlwaysScrollableScrollPhysics()),
               itemCount: data.songs?.length,
-              scrollDirection: Axis.horizontal,
+              scrollDirection: Axis.vertical,
               itemBuilder: (context, index){
                 return SizedBox(
-                  width: 127,
+                  width: 250,
                   child: Card(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20)
                     ),
                     color: Colors.amber,
-                    child: Center(
-                      child: Image.network(data?.songs?[index].cover),
+                    child: Container(
+                      height: 100,
+                      color: Colors.white,
+                      child: Row(
+                        children: [
+                          Center(
+                            child: Padding(
+                              padding: EdgeInsets.all(10),
+                              child: Expanded(
+                                child:Image.network(data?.songs?[index].cover),
+                                flex:2 ,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child:Container(
+                              alignment: Alignment.topLeft,
+                              child: Column(
+                                children: [
+                                  Expanded(
+                                    flex: 5,
+                                    child: ListTile(
+                                      title: Text("${data?.songs?[index].title}"),
+                                      subtitle: Text("${data?.songs?[index].performer}"),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 5,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        TextButton(
+                                          child:Text("PLAY"),
+                                          onPressed: ()
+                                          {},
+                                        ),
+                                        SizedBox(width: 8,),
+                                        TextButton(
+                                          child:Text("ADD TO QUEUE"),
+                                          onPressed: ()
+                                          {},
+                                        ),
+                                        // IconButton(
+                                        //   icon: Icon(Icons.home),//sesuaikan icon
+                                        //   //label: 'Home',
+                                        //   onPressed: (){},
+                                        // ),
+                                        SizedBox(width: 8,)
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            flex:8 ,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 );
@@ -149,50 +205,50 @@ class _HomePageState extends State<HomePage> {
               },
             ),
           ),
-          const SizedBox(
-            height: 20,
-          ),
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 15),
-            child: Align(
-              alignment: Alignment.topLeft,
-              child: Text("Playlist lists",
-                style: TextStyle(
-                  color: Color(0xFFB226B2),
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 127,
-            child: ListView.separated(
-              physics: const BouncingScrollPhysics(
-                  parent: AlwaysScrollableScrollPhysics()),
-              itemCount: 10,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index){
-                return SizedBox(
-                  width: 127,
-                  child: Card(
-                    color: Colors.amber,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)
-                    ),
-                    child: Center(
-                      child: Text('$index'),
-                    ),
-                  ),
-                );
-              },
-              separatorBuilder: (context, index){
-                return const SizedBox(
-                  width: 17,
-                );
-              },
-            ),
-          ),
+          // const SizedBox(
+          //   height: 20,
+          // ),
+          // const Padding(
+          //   padding: EdgeInsets.symmetric(vertical: 15),
+          //   child: Align(
+          //     alignment: Alignment.topLeft,
+          //     child: Text("Playlist lists",
+          //       style: TextStyle(
+          //         color: Color(0xFFB226B2),
+          //         fontSize: 20,
+          //         fontWeight: FontWeight.w600,
+          //       ),
+          //     ),
+          //   ),
+          // ),
+          // SizedBox(
+          //   height: 127,
+          //   child: ListView.separated(
+          //     physics: const BouncingScrollPhysics(
+          //         parent: AlwaysScrollableScrollPhysics()),
+          //     itemCount: 10,
+          //     scrollDirection: Axis.horizontal,
+          //     itemBuilder: (context, index){
+          //       return SizedBox(
+          //         width: 127,
+          //         child: Card(
+          //           color: Colors.amber,
+          //           shape: RoundedRectangleBorder(
+          //               borderRadius: BorderRadius.circular(20)
+          //           ),
+          //           child: Center(
+          //             child: Text('$index'),
+          //           ),
+          //         ),
+          //       );
+          //     },
+          //     separatorBuilder: (context, index){
+          //       return const SizedBox(
+          //         width: 17,
+          //       );
+          //     },
+          //   ),
+          //),
         ],
       ),
     );

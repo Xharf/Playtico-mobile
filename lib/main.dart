@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:playticoapp/routing.dart';
-import 'package:playticoapp/screens/displaysongspage2.dart';
+//import 'package:playticoapp/screens/displaysongspage.dart';
+//import 'package:playticoapp/screens/displaysongspage2.dart';
 import 'package:playticoapp/screens/loginpage.dart';
 import 'package:playticoapp/screens/registerpage.dart';
 import 'firebase_options.dart';
-import 'package:playticoapp/screens/homepage.dart';
+//import 'package:playticoapp/screens/homepage.dart';
+import 'package:playticoapp/screens/rand2.dart';
 
 void main() async{
   await Firebase.initializeApp(
@@ -25,7 +27,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: DisplaySongs(),
+      //home: DisplaySongs(),
+      home: HomePage(),
     );
   }
 }
