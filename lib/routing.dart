@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:playticoapp/screens/loginpage.dart';
+import 'package:playticoapp/screens/playingnowpage.dart';
 import 'package:playticoapp/screens/registerpage.dart';
 import 'package:playticoapp/screens/homepage.dart';
 
@@ -47,6 +48,20 @@ class Routing extends StatelessWidget {
                   Navigator.pushReplacement(
                       context,
                       new MaterialPageRoute(builder: (context) => HomePage())
+                  );
+                },
+              ),
+            ),
+            SizedBox(
+                height: 20
+            ),
+            Center(
+              child: ElevatedButton(
+                child: Text("homepage"),
+                onPressed: (){
+                  Navigator.pushReplacement(
+                      context,
+                      new MaterialPageRoute(builder: (context) => PlayingNow())
                   );
                 },
               ),
