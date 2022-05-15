@@ -61,7 +61,7 @@ class Routing extends StatelessWidget {
                 onPressed: (){
                   Navigator.pushReplacement(
                       context,
-                      new MaterialPageRoute(builder: (context) => PlayingNow())
+                      new MaterialPageRoute(builder: (context) => PlayingNow(songUrl: 'https://storage.googleapis.com/playtico-0123.appspot.com/TULUS - Cahaya.mp3',))
                   );
                 },
               ),

@@ -10,6 +10,7 @@ import 'package:playticoapp/screens/rand2.dart';
 import 'package:playticoapp/screens/homepage.dart';
 
 void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

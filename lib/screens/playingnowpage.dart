@@ -1,9 +1,18 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'package:http/http.dart';
+import 'package:flutter/services.dart';
+import 'dart:typed_data';
+
+// const songUrl = 'https://storage.googleapis.com/playtico-0123.appspot.com/Berisik - Dere.mp3';
+
+enum AudioPlayerState { STOPPED,PLAYING, PAUSED, COMPLETED}
 
 class PlayingNow extends StatefulWidget {
-  const PlayingNow({Key? key}) : super(key: key);
+  final songUrl;
+
+  const PlayingNow({Key? key, required this.songUrl}) : super(key: key);
 
   @override
   State<PlayingNow> createState() => _PlayingNowState();
@@ -11,6 +20,57 @@ class PlayingNow extends StatefulWidget {
 
 class _PlayingNowState extends State<PlayingNow> {
   int valueHolder = 20;
+  int maxduration = 100;
+  String maxdurationlabel = "00:00";
+  int currentpos = 0;
+  String currentpostlabel = "00:00";
+  bool isplaying = false;
+  bool audioplayed = false;
+  Uint8List? audiobytes;
+  AudioPlayer player = AudioPlayer();
+  String audioasset = "assets/audio/";
+
+  @override
+  void initState() {
+    Future.delayed(Duration.zero, () async {
+      ByteData bytes = await rootBundle.load((audioasset +(widget.songUrl.split('/').last))); //load audio from assets
+      audiobytes = bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes);
+      player.onDurationChanged.listen((Duration d) { //get the duration of audio
+        maxduration = d.inMilliseconds;
+        int shours = Duration(milliseconds:maxduration).inHours;
+        int sminutes = Duration(milliseconds:maxduration).inMinutes;
+        int sseconds = Duration(milliseconds:maxduration).inSeconds;
+
+        int rhours = shours;
+        int rminutes = sminutes - (shours * 60);
+        int rseconds = sseconds - (sminutes * 60 + shours * 60 * 60);
+        maxdurationlabel = (rhours == 0)?"$rminutes:$rseconds":"$rhours:$rminutes:$rseconds";
+        setState(() {
+        });
+      });
+      player.onAudioPositionChanged.listen((Duration  p){
+        currentpos = p.inMilliseconds; //get the current position of playing audio
+        //generating the duration label
+        int shours = Duration(milliseconds:currentpos).inHours;
+        int sminutes = Duration(milliseconds:currentpos).inMinutes;
+        int sseconds = Duration(milliseconds:currentpos).inSeconds;
+
+        int rhours = shours;
+        int rminutes = sminutes - (shours * 60);
+        int rseconds = sseconds - (sminutes * 60 + shours * 60 * 60);
+
+        currentpostlabel = (rhours == 0)?"$rminutes:$rseconds":"$rhours:$rminutes:$rseconds";
+
+        setState(() {
+          //refresh the UI
+        });
+      });
+
+    });
+    super.initState();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,17 +142,21 @@ class _PlayingNowState extends State<PlayingNow> {
                   overlayShape: SliderComponentShape.noOverlay
                 ),
                 child: Slider(
-                    value: valueHolder.toDouble(),
-                    min: 1,
-                    max: 100,
-                    divisions: 100,
+                    value: double.parse(currentpos.toString()),
+                    min: 0,
+                    max: double.parse(maxduration.toString()),
+                    divisions: maxduration,
                     activeColor: const Color(0xFF960E96),
                     inactiveColor: const Color(0xFFFF00FF),
-                    label: '${valueHolder.round()}',
-                    onChanged: (double newValue) {
-                      setState(() {
-                        valueHolder = newValue.round();
-                      });
+                    label: currentpostlabel,
+                    onChanged: (double value) async {
+                        int seekval = value.round();
+                        int result = await player.seek(Duration(milliseconds: seekval));
+                        if(result == 1){ //seek successful
+                          currentpos = seekval;
+                        }else{
+                          print("Seek unsuccessful.");
+                        }
                     },
                     semanticFormatterCallback: (double newValue) {
                       return '${newValue.round()}';
@@ -106,8 +170,7 @@ class _PlayingNowState extends State<PlayingNow> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    "01:35",
+                  Text(currentpostlabel,
                     textAlign: TextAlign.left,
                     style: TextStyle(
                       fontSize: 18,
@@ -117,7 +180,7 @@ class _PlayingNowState extends State<PlayingNow> {
                     ),
                   ),
                   Text(
-                    "03:55",
+                    maxdurationlabel,
                     textAlign: TextAlign.left,
                     style: TextStyle(
                       fontSize: 18,
@@ -137,7 +200,7 @@ class _PlayingNowState extends State<PlayingNow> {
                 children: [
                   IconButton(
                     icon: Icon(Icons.shuffle_rounded),
-                    onPressed: (){
+                    onPressed: () {
 
                     },
                   ),
@@ -145,23 +208,65 @@ class _PlayingNowState extends State<PlayingNow> {
                     icon: Icon(
                         Icons.skip_previous_rounded,
                     ),
-                    onPressed: (){
-
+                    onPressed: () async{
+                      int seekval = currentpos - 10000;
+                      int result = await player.seek(Duration(milliseconds: seekval));
+                      if(result == 1){ //seek successful
+                        currentpos = seekval;
+                      }else{
+                        print("Seek unsuccessful.");
+                      }
                     },
                   ),
                   IconButton(
                     color: Color(0xFF960E96),
                     hoverColor: Color(0x35FF00FF),
                     splashColor: Colors.white,
-                    icon: Icon(Icons.play_arrow_rounded),
-                    onPressed: (){
-
+                    icon: Icon(isplaying?Icons.pause_rounded:Icons.play_arrow_rounded),
+                    onPressed: () async {
+                      if(!isplaying && !audioplayed){
+                        int result = await player.playBytes(audiobytes!);
+                        // int result = await player.play(songUrl);
+                        if(result == 1){ //play success
+                          setState(() {
+                            isplaying = true;
+                            audioplayed = true;
+                          });
+                        }else{
+                          print("Error while playing audio.");
+                        }
+                      }else if(audioplayed && !isplaying){
+                        int result = await player.resume();
+                        if(result == 1){ //resume success
+                          setState(() {
+                            isplaying = true;
+                            audioplayed = true;
+                          });
+                        }else{
+                          print("Error on resume audio.");
+                        }
+                      }else{
+                        int result = await player.pause();
+                        if(result == 1){ //pause success
+                          setState(() {
+                            isplaying = false;
+                          });
+                        }else{
+                          print("Error on pause audio.");
+                        }
+                      }
                     },
                   ),
                   IconButton(
                     icon: Icon(Icons.skip_next_rounded),
-                    onPressed: (){
-
+                    onPressed: () async {
+                      int seekval = currentpos + 10000;
+                      int result = await player.seek(Duration(milliseconds: seekval));
+                      if(result == 1){ //seek successful
+                        currentpos = seekval;
+                      }else{
+                        print("Seek unsuccessful.");
+                      }
                     },
                   ),
                   IconButton(
