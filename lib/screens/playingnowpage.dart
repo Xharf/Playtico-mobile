@@ -5,14 +5,17 @@ import 'package:http/http.dart';
 import 'package:flutter/services.dart';
 import 'dart:typed_data';
 
-// const songUrl = 'https://storage.googleapis.com/playtico-0123.appspot.com/Berisik - Dere.mp3';
+import 'package:playticoapp/models/song_get_spesific_model.dart';
+import 'package:playticoapp/services/songs_data_store.dart';
 
-enum AudioPlayerState { STOPPED,PLAYING, PAUSED, COMPLETED}
+enum AudioPlayerState { STOPPED, PLAYING, PAUSED, COMPLETED }
 
 class PlayingNow extends StatefulWidget {
+  final songId;
   final songUrl;
 
-  const PlayingNow({Key? key, required this.songUrl}) : super(key: key);
+  const PlayingNow({Key? key, required this.songId, required this.songUrl})
+      : super(key: key);
 
   @override
   State<PlayingNow> createState() => _PlayingNowState();
@@ -33,43 +36,48 @@ class _PlayingNowState extends State<PlayingNow> {
   @override
   void initState() {
     Future.delayed(Duration.zero, () async {
-      ByteData bytes = await rootBundle.load((audioasset +(widget.songUrl.split('/').last))); //load audio from assets
-      audiobytes = bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes);
-      player.onDurationChanged.listen((Duration d) { //get the duration of audio
+      ByteData bytes = await rootBundle.load((audioasset +
+          (widget.songUrl.split('/').last))); //load audio from assets
+      audiobytes =
+          bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes);
+      player.onDurationChanged.listen((Duration d) {
+        //get the duration of audio
         maxduration = d.inMilliseconds;
-        int shours = Duration(milliseconds:maxduration).inHours;
-        int sminutes = Duration(milliseconds:maxduration).inMinutes;
-        int sseconds = Duration(milliseconds:maxduration).inSeconds;
+        int shours = Duration(milliseconds: maxduration).inHours;
+        int sminutes = Duration(milliseconds: maxduration).inMinutes;
+        int sseconds = Duration(milliseconds: maxduration).inSeconds;
 
         int rhours = shours;
         int rminutes = sminutes - (shours * 60);
         int rseconds = sseconds - (sminutes * 60 + shours * 60 * 60);
-        maxdurationlabel = (rhours == 0)?"$rminutes:$rseconds":"$rhours:$rminutes:$rseconds";
-        setState(() {
-        });
+        maxdurationlabel = (rhours == 0)
+            ? "$rminutes:$rseconds"
+            : "$rhours:$rminutes:$rseconds";
+        setState(() {});
       });
-      player.onAudioPositionChanged.listen((Duration  p){
-        currentpos = p.inMilliseconds; //get the current position of playing audio
+      player.onAudioPositionChanged.listen((Duration p) {
+        currentpos =
+            p.inMilliseconds; //get the current position of playing audio
         //generating the duration label
-        int shours = Duration(milliseconds:currentpos).inHours;
-        int sminutes = Duration(milliseconds:currentpos).inMinutes;
-        int sseconds = Duration(milliseconds:currentpos).inSeconds;
+        int shours = Duration(milliseconds: currentpos).inHours;
+        int sminutes = Duration(milliseconds: currentpos).inMinutes;
+        int sseconds = Duration(milliseconds: currentpos).inSeconds;
 
         int rhours = shours;
         int rminutes = sminutes - (shours * 60);
         int rseconds = sseconds - (sminutes * 60 + shours * 60 * 60);
 
-        currentpostlabel = (rhours == 0)?"$rminutes:$rseconds":"$rhours:$rminutes:$rseconds";
+        currentpostlabel = (rhours == 0)
+            ? "$rminutes:$rseconds"
+            : "$rhours:$rminutes:$rseconds";
 
         setState(() {
           //refresh the UI
         });
       });
-
     });
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +98,35 @@ class _PlayingNowState extends State<PlayingNow> {
         ),
       ),
       body: SafeArea(
-        child: Column(
+          child: FutureBuilder(
+        future: SongDataSource.instance.getSongsById(widget.songId),
+        builder: (
+          BuildContext context,
+          AsyncSnapshot<dynamic> snapshot,
+        ) {
+          if (snapshot.hasError) {
+            return Text("Some error Appeared");
+          }
+          if (snapshot.hasData) {
+            SongGetSpecificModel songsModel = SongGetSpecificModel.fromJson(snapshot.data);
+            return _buildSuccessSection(songsModel.data);
+          }
+          return _buildLoadingSection();
+        },
+      )
+          //
+          ),
+    );
+  }
+
+  Widget _buildLoadingSection() {
+    return Center(
+      child: CircularProgressIndicator(),
+    );
+  }
+
+  Widget _buildSuccessSection(data) {
+    return Column(
           children: [
             Container(
               width: 256,
@@ -98,7 +134,7 @@ class _PlayingNowState extends State<PlayingNow> {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   fit: BoxFit.contain,
-                  image: NetworkImage("https://storage.googleapis.com/playtico-0123.appspot.com/1652004691582ab67616d0000b2732dedd724077513faa2ff5933.jpg")
+                  image: NetworkImage(data.song?.cover)
                 ),
                 borderRadius: BorderRadius.all(Radius.circular(20))
               ),
@@ -111,7 +147,7 @@ class _PlayingNowState extends State<PlayingNow> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Tujuh Belas",
+                  Text(data.song?.title,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 24,
@@ -123,7 +159,7 @@ class _PlayingNowState extends State<PlayingNow> {
               ),
             ),
             Text(
-              "Tulus",
+              data.song?.performer,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 14,
@@ -279,8 +315,6 @@ class _PlayingNowState extends State<PlayingNow> {
               ),
             )
           ],
-        ),
-      ),
-    );
+        );
   }
 }

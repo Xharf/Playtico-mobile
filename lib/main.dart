@@ -1,13 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:playticoapp/screens/homepage.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:playticoapp/routing.dart';
-//import 'package:playticoapp/screens/displaysongspage.dart';
-//import 'package:playticoapp/screens/displaysongspage2.dart';
 import 'package:playticoapp/screens/loginpage.dart';
 import 'package:playticoapp/screens/registerpage.dart';
-import 'package:playticoapp/screens/rand2.dart';
-import 'package:playticoapp/screens/homepage.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,7 +27,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       //home: DisplaySongs(),
-      home: Routing(),
+      home: HomePage(),
     );
   }
 }
