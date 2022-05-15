@@ -77,29 +77,22 @@ class _DisplaySongsState extends State<DisplaySongs> {
       itemCount: data.songs?.length,
       itemBuilder: (BuildContext context, int index) {
         return Card(
-          child: ListTile(
-            leading: InkWell(
-              onTap: (){
+          child: InkWell(
+            onTap: (){
               Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => PlayingNow(
                     songId: data?.songs?[index].id,
                     songUrl: data?.songs?[index].song,
                   )));
             },
-              splashColor: Colors.white,
-              child: Image.network(data?.songs?[index].cover),
+            splashColor: Colors.white,
+            child: ListTile(
+              leading: Image.network(data?.songs?[index].cover),
+              title: Text(data?.songs?[index].title),
+              subtitle: Text("By : " + data?.songs?[index].performer),
             ),
-            title: Text(data?.songs?[index].title),
-            subtitle: Text("By : " + data?.songs?[index].performer),
           ),
         );
-
-        // return Card(
-        //     child: Padding(
-        //   padding: const EdgeInsets.all(15),
-        //   child: _buildItemSongs(
-        //       "${data?.songs?[index].title} by ${data?.songs?[index].performer}"),
-        // ));
       },
     );
   }
