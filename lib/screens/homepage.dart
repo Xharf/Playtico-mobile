@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:playticoapp/models/songs_model2.dart';
-import 'package:playticoapp/screens/displaysongspage2.dart';
+import 'package:playticoapp/screens/displaysongs.dart';
 import 'package:playticoapp/screens/loginpage.dart';
 import 'package:playticoapp/screens/playingnowpage.dart';
 import 'package:playticoapp/services/songs_data_store.dart';
@@ -152,9 +152,14 @@ class _HomePageState extends State<HomePage> {
                     child: Card(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20)),
-                      color: Colors.amber,
-                      child: Center(
-                        child: Image.network(data?.songs?[index].cover),
+                      child : Container(
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                fit: BoxFit.contain,
+                                image: NetworkImage(data.songs[index]?.cover)
+                            ),
+                            borderRadius: BorderRadius.all(Radius.circular(30))
+                        ),
                       ),
                     ),
                   ),
