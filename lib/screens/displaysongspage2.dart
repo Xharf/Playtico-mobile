@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:playticoapp/models/songs_model2.dart';
+import 'package:playticoapp/screens/playingnowpage.dart';
 import 'package:playticoapp/services/songs_data_store.dart';
 
 class DisplaySongs extends StatefulWidget {
@@ -14,7 +15,12 @@ class _DisplaySongsState extends State<DisplaySongs> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("All Songs"),
+        backgroundColor: const Color(0xFF960E96),
+        title: const Text("All Songs",
+            style: TextStyle(
+                fontSize: 26,
+                color: Colors.white,
+                fontWeight: FontWeight.w800)),
       ),
       body: _buildSongsPageBody(),
     );
@@ -71,11 +77,29 @@ class _DisplaySongsState extends State<DisplaySongs> {
       itemCount: data.songs?.length,
       itemBuilder: (BuildContext context, int index) {
         return Card(
-            child: Padding(
-          padding: const EdgeInsets.all(15),
-          child: _buildItemSongs(
-              "${data?.songs?[index].title} by ${data?.songs?[index].performer}"),
-        ));
+          child: ListTile(
+            leading: InkWell(
+              onTap: (){
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => PlayingNow(
+                    songId: data?.songs?[index].id,
+                    songUrl: data?.songs?[index].song,
+                  )));
+            },
+              splashColor: Colors.white,
+              child: Image.network(data?.songs?[index].cover),
+            ),
+            title: Text(data?.songs?[index].title),
+            subtitle: Text("By : " + data?.songs?[index].performer),
+          ),
+        );
+
+        // return Card(
+        //     child: Padding(
+        //   padding: const EdgeInsets.all(15),
+        //   child: _buildItemSongs(
+        //       "${data?.songs?[index].title} by ${data?.songs?[index].performer}"),
+        // ));
       },
     );
   }
