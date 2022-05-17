@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:playticoapp/screens/homepage.dart';
+import 'package:playticoapp/screens/profilepage.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:playticoapp/routing.dart';
@@ -15,11 +16,13 @@ void main() async{
   runApp(const MyApp());
 }
 
+
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
@@ -27,7 +30,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       //home: DisplaySongs(),
-      home: HomePage(),
+      home: LoginPage(),
     );
   }
 }

@@ -9,4 +9,8 @@ class SongDataSource {
   Future<Map<String, dynamic>> getSongsById(String id) {
     return BaseNetwork.get("songs/$id");
   }
+
+  Future<Map<String, dynamic>> loadPlaylists(String token) {
+    return BaseNetwork.getPlaylists("playlists", token);
+  }
 }
