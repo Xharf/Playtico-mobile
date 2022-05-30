@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:playticoapp/models/user_profile_model.dart';
+import 'package:playticoapp/screens/displayplaylists.dart';
 import 'package:playticoapp/screens/homepage.dart';
 import 'package:playticoapp/screens/loginpage.dart';
 import 'package:playticoapp/services/user_data_source.dart';
@@ -83,6 +84,13 @@ class _ProfilePageState extends State<ProfilePage> {
                 Navigator.of(context).pushReplacement(MaterialPageRoute(
                     builder: (context) => const HomePage()));
               }
+              break;
+            case 2:
+              {
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => const DisplayPlaylists()));
+              }
+              break;
           }
         },
         currentIndex: _page,

@@ -95,6 +95,12 @@ class _HomePageState extends State<HomePage> {
         // onTap: (newIndex) => setState(() => _page = newIndex),
         onTap: (index) {
           switch (index) {
+            case 2:
+              {
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => const DisplayPlaylists()));
+              }
+              break;
             case 3:
               {
                 Navigator.of(context).pushReplacement(MaterialPageRoute(

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:playticoapp/models/playlists_hive_model.dart';
+import 'package:playticoapp/screens/homepage.dart';
 import 'package:playticoapp/screens/loginpage.dart';
 import 'package:playticoapp/screens/playingnowpage.dart';
+import 'package:playticoapp/screens/profilepage.dart';
 import 'package:playticoapp/services/songs_data_store.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:playticoapp/models/playlists_model.dart';
@@ -15,6 +17,7 @@ class DisplayPlaylists extends StatefulWidget {
   _DisplayPlaylistsState createState() => _DisplayPlaylistsState();
 }
 
+int _page = 2;
 
 class _DisplayPlaylistsState extends State<DisplayPlaylists> {
   SharedPreferences? loginData;
@@ -53,6 +56,50 @@ class _DisplayPlaylistsState extends State<DisplayPlaylists> {
                 fontWeight: FontWeight.w800)),
       ),
       body: _buildSongsPageBody(),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: const Color(0xFF960E96),
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Color(0xFFDA77D7),
+        selectedLabelStyle: const TextStyle(color: Colors.white),
+        unselectedLabelStyle: const TextStyle(color: Color(0xFFDA77D7)),
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search),
+            label: 'Discover',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.bookmark),
+            label: 'Playlist',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
+        // onTap: (newIndex) => setState(() => _page = newIndex),
+        onTap: (index) {
+          switch (index) {
+            case 0:
+              {
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => const HomePage()));
+              }
+              break;
+            case 3:
+              {
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => const ProfilePage()));
+              }
+          }
+        },
+        currentIndex: _page,
+      ),
+
     );
   }
 
