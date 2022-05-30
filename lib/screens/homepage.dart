@@ -4,6 +4,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:playticoapp/models/playlists_model.dart';
 import 'package:playticoapp/models/refresh_token_model.dart';
 import 'package:playticoapp/models/songs_model2.dart';
+import 'package:playticoapp/screens/displayplaylists.dart';
 import 'package:playticoapp/screens/displaysongs.dart';
 import 'package:playticoapp/screens/loginpage.dart';
 import 'package:playticoapp/screens/playingnowpage.dart';
@@ -211,17 +212,30 @@ class _HomePageState extends State<HomePage> {
           const SizedBox(
             height: 20,
           ),
-          const Padding(
+          Padding(
             padding: EdgeInsets.symmetric(vertical: 15),
             child: Align(
               alignment: Alignment.topLeft,
-              child: Text(
-                "Playlist lists",
-                style: TextStyle(
-                  color: Color(0xFFB226B2),
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    "Playlist List",
+                    style: TextStyle(
+                      color: Color(0xFFB226B2),
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => DisplayPlaylists()));
+                      },
+                      child: const Text("See More"))
+                ],
               ),
             ),
           ),
