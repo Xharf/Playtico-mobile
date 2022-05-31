@@ -38,24 +38,6 @@ class _DisplaySongsState extends State<DisplaySongs> {
             return _buildErrorSection();
           }
           if (snapshot.hasData) {
-            // Kesalahan sebelumnya ada di proses convertnya
-            // struktur response api yang kita punya itu
-            // {
-            //   "status" : "string",
-            //   "data": {
-            //     "songs": [
-            //        "id": "string"
-            //        dll...
-            //     ],
-            //   }
-            // }
-            // dia harus diconvert mulai dari struktur teratasnya,
-            // bukan cuma data di dalamnya aja. Itu artinya harus ada
-            // variable yang nerima status dan data
-            // setelah itu data baru bisa digunakan.
-            // singkatnya, yang harusnya dipakai itu SongsModel.fromJson
-            // bukan Data.fromJson
-
             SongsModel songsModel = SongsModel.fromJson(snapshot.data);
             return _buildSuccessSection(songsModel.data);
           }
